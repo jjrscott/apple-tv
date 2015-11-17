@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, PCGroupViewDirection) {
 @property (nonatomic, assign) UIEdgeInsets viewInsets;
 @property (nonatomic, assign) CGSize constraintSize;
 @property (nonatomic, assign) PCGroupViewPosition viewAlignment;
+@property (nonatomic, assign) CGSize fixedSize;
 
 + (instancetype)groupWithViews:(NSArray *)views;
 

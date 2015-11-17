@@ -38,7 +38,9 @@
 
 @end
 
-@implementation EpisodeDetailViewController
+@implementation EpisodeDetailViewController {
+    AVPlayerViewController *playerViewController;
+}
 
 - (instancetype)initWithEpisode:(Episode *)episode
 {
@@ -89,16 +91,19 @@
     
     self.playButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
+    self.playButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.playButton addTarget:self action:@selector(handlePlay:) forControlEvents:UIControlEventPrimaryActionTriggered];
-    
+
     self.audioDescribedButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.audioDescribedButton setTitle:@"AD" forState:UIControlStateNormal];
+    [self.audioDescribedButton setTitle:@"Audio Described" forState:UIControlStateNormal];
+    self.audioDescribedButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.audioDescribedButton addTarget:self action:@selector(handlePlay:) forControlEvents:UIControlEventPrimaryActionTriggered];
-    
+
     self.signedButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.signedButton setTitle:@"SL" forState:UIControlStateNormal];
+    [self.signedButton setTitle:@"Signed" forState:UIControlStateNormal];
+    self.signedButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.signedButton addTarget:self action:@selector(handlePlay:) forControlEvents:UIControlEventPrimaryActionTriggered];
-    
+
 //    self.relatedProgramView = [[EpisodeCollectionView alloc] init];
 //    self.relatedProgramView.numberOfEpisodesPerRow = 4;
 //    self.relatedProgramView.collectionLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -151,10 +156,11 @@
     if (self.episode.signedVersion) {
         [availableButtons addObject:self.signedButton];
     }
-    
+
     self.buttonsView = [PCGroupView groupWithViews:availableButtons];
-    self.buttonsView.direction = PCGroupViewDirectionHorizontal;
-    self.buttonsView.viewInsets = UIEdgeInsetsMake(0, 30, 0, 0);
+    self.buttonsView.direction = PCGroupViewDirectionVertical;
+    self.buttonsView.fixedSize = CGSizeMake(600, 80);
+    self.buttonsView.viewInsets = UIEdgeInsetsMake(0, 0, 10, 0);
     [self.view addSubview:self.buttonsView];
     
     self.groupView = [PCGroupView groupWithViews:@[self.titleLabel, self.subtitleLabel, self.infoLabel, self.descriptionLabel, self.buttonsView]];
@@ -212,15 +218,17 @@
         selectedVersion = self.episode.signedVersion;
         
     }
-    AVPlayerViewController *viewController = [[AVPlayerViewController alloc] init];
-    viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:viewController animated:YES completion:nil];
+    playerViewController = [[AVPlayerViewController alloc] init];
+    playerViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:playerViewController animated:YES completion:nil];
+
     
     [[AuntieController sharedController] getStreamURLForVersion:selectedVersion completion:^(NSURL *episodeURL, NSError *error) {
         
         if (error) {
             
-            [viewController dismissViewControllerAnimated:YES completion:nil];
+            [playerViewController dismissViewControllerAnimated:YES completion:nil];
+            playerViewController = nil;
             
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Unable to start video playback." message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
             [alertController addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil]];
@@ -229,9 +237,27 @@
         
         AVPlayer *player = [[AVPlayer alloc] initWithURL:episodeURL];
         player.closedCaptionDisplayEnabled = true;
-        
-        viewController.player = player;
-        [viewController.player play];
+
+
+        playerViewController.player = player;
+        [playerViewController.player play];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(itemDidFinishPlaying:)
+                                                         name:AVPlayerItemDidPlayToEndTimeNotification
+                                                       object:player.currentItem];
+        });
+       
+    }];
+}
+
+- (void)itemDidFinishPlaying:(NSNotification *)notification {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    NSLog(@"finished!");
+    [playerViewController dismissViewControllerAnimated:YES completion:^{
+        playerViewController = nil;
     }];
 }
 

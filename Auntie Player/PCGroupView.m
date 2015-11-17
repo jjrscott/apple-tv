@@ -102,8 +102,15 @@
     
     // Size
     for (UIView *view in self.views) {
-        
-        CGSize size = [view sizeThatFits:self.constraintSize];
+
+        CGSize size;
+
+        if (self.fixedSize.width != 0) {
+            size = self.fixedSize;
+        } else {
+
+            size = [view sizeThatFits:self.constraintSize];
+        }
         
         view.frame = CGRectMake(x, y + self.viewInsets.top, size.width, size.height);
         
