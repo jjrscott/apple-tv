@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Auntie Player/EpisodeDetailViewController.m"
-            timestampString = "469433572.408777"
+            timestampString = "469433990.940191"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,12 +90,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Auntie Player/EpisodeDetailViewController.m"
-            timestampString = "469433572.408777"
+            timestampString = "469433990.940191"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
-            landmarkName = "-handlePlay:"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
+            landmarkName = "-itemDidFinishPlaying:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -106,12 +106,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Auntie Player/EpisodeDetailViewController.m"
-            timestampString = "469433572.408777"
+            timestampString = "469433990.940191"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "257"
-            endingLineNumber = "257"
-            landmarkName = "-itemDidFinishPlaying:"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "-handleDescription:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

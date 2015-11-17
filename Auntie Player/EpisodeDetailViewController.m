@@ -104,21 +104,6 @@
     self.signedButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.signedButton addTarget:self action:@selector(handlePlay:) forControlEvents:UIControlEventPrimaryActionTriggered];
 
-//    self.relatedProgramView = [[EpisodeCollectionView alloc] init];
-//    self.relatedProgramView.numberOfEpisodesPerRow = 4;
-//    self.relatedProgramView.collectionLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-//    self.relatedProgramView.delegate = self;
-//    //    self.relatedEpisodeView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
-//    [self.view addSubview:self.relatedProgramView];
-//    
-//    if ([self.episode isMemberOfClass:[Episode class]]) {
-//        
-//        
-//        [[AuntieController sharedController] getRelatedEpisodesForEpisode:self.episode completion:^(NSArray *content, NSError *error) {
-//            self.relatedProgramView.episodes = content;
-//        }];
-//    }
-//    
     self.relatedEpisodeView = [[EpisodeCollectionView alloc] init];
     self.relatedEpisodeView.numberOfEpisodesPerRow = 4;
     self.relatedEpisodeView.collectionLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -129,8 +114,13 @@
     NSString *ident = self.episode.tleo_id ? self.episode.tleo_id : self.episode.identifier;
     if ([self.episode isMemberOfClass:[Episode class]]) {
 
-        [[AuntieController sharedController] getEpisodesForProgrammeByString:ident completion:^(NSArray *content, NSError *error) {
-            self.relatedEpisodeView.episodes = content;
+        [[AuntieController sharedController] getEpisodesForProgrammeByString:ident completion:^(NSArray *episodes, NSError *error) {
+            
+            [[AuntieController sharedController] getRelatedEpisodesForEpisode:self.episode completion:^(NSArray *content, NSError *error) {
+                NSMutableArray *items = [episodes mutableCopy];
+                [items addObjectsFromArray:content];
+                self.relatedEpisodeView.episodes = items;
+            }];
         }];
     }
     
