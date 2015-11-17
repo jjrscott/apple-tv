@@ -30,17 +30,32 @@
 
 @implementation CategoryEpisodesViewController
 
+
+
 - (void)refreshWithEpisodeCategory:(EpisodeCategory *)category
 {
     [self.activityIndicatorView startAnimating];
+
+    if (self.isAtoZ) {
+        [[AuntieController sharedController] getAllEpisodesForCategory:category completion:^(NSArray *episodes, NSError *error) {
+
+            [self.activityIndicatorView stopAnimating];
+
+            self.episodes = episodes;
+            self.collectionView.episodes = episodes;
+        }];
+
+    } else {
+        [[AuntieController sharedController] getEpisodesForCategory:category completion:^(NSArray *episodes, NSError *error) {
+
+            [self.activityIndicatorView stopAnimating];
+
+            self.episodes = episodes;
+            self.collectionView.episodes = episodes;
+        }];
+    }
     
-    [[AuntieController sharedController] getEpisodesForCategory:category completion:^(NSArray *episodes, NSError *error) {
-        
-        [self.activityIndicatorView stopAnimating];
-        
-        self.episodes = episodes;
-        self.collectionView.episodes = episodes;
-    }];
+
 }
 
 

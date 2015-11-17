@@ -26,5 +26,5 @@
 #import "AuntieViewController.h"
 
 @interface CategoriesViewController : UISplitViewController
-
+@property BOOL isAtoZ;
 @end

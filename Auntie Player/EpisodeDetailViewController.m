@@ -126,9 +126,10 @@
 //    self.relatedEpisodeView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
     [self.view addSubview:self.relatedEpisodeView];
     
+    NSString *ident = self.episode.tleo_id ? self.episode.tleo_id : self.episode.identifier;
     if ([self.episode isMemberOfClass:[Episode class]]) {
 
-        [[AuntieController sharedController] getEpisodesForProgrammeByString:self.episode.tleo_id completion:^(NSArray *content, NSError *error) {
+        [[AuntieController sharedController] getEpisodesForProgrammeByString:ident completion:^(NSArray *content, NSError *error) {
             self.relatedEpisodeView.episodes = content;
         }];
     }
@@ -255,7 +256,6 @@
 - (void)itemDidFinishPlaying:(NSNotification *)notification {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
-    NSLog(@"finished!");
     [playerViewController dismissViewControllerAnimated:YES completion:^{
         playerViewController = nil;
     }];

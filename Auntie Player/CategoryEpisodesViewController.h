@@ -26,6 +26,8 @@
 
 @interface CategoryEpisodesViewController : EpisodesViewController
 
+@property BOOL isAtoZ;
+
 - (void)refreshWithEpisodeCategory:(EpisodeCategory *)category;
 
 @end

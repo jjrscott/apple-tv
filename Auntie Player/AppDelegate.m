@@ -29,6 +29,7 @@
 #import "SearchEpisodesViewController.h"
 #import "UIColor+Auntie.h"
 #import "LiveChannelsViewController.h"
+#import "CategoriesAZViewController.h"
 
 @import AuntieKit;
 
@@ -44,6 +45,8 @@
     FeaturedEpisodesViewController *featuredViewController = [FeaturedEpisodesViewController new];
 
     CategoriesViewController *categoriesViewController = [CategoriesViewController new];
+    CategoriesAZViewController *aToZViewController = [CategoriesAZViewController new];
+
     SearchEpisodesViewController *searchViewController = [SearchEpisodesViewController new];
     LiveChannelsViewController *channelsViewController = [LiveChannelsViewController new];
     
@@ -66,7 +69,7 @@
     
     //Setup Tab Bar
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = @[featuredViewController, categoriesViewController, channelsViewController, searchNavController];
+    tabBarController.viewControllers = @[featuredViewController, categoriesViewController, aToZViewController, channelsViewController, searchNavController];
 
     UITabBar *tabBar = [UITabBar appearance];
     tabBar.barTintColor = [UIColor blackColor];

@@ -23,6 +23,7 @@
 		13E40B6C1BD6765A002B8603 /* ThunderRequestTV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13E40B6B1BD6765A002B8603 /* ThunderRequestTV.framework */; };
 		13E40B6D1BD6765A002B8603 /* ThunderRequestTV.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 13E40B6B1BD6765A002B8603 /* ThunderRequestTV.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		13E40B701BD67701002B8603 /* ThunderRequestTV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13E40B6B1BD6765A002B8603 /* ThunderRequestTV.framework */; };
+		1AA085A56F095B05D536D027 /* CategoriesAZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA0899BECCE55C9C4A671C9 /* CategoriesAZViewController.m */; };
 		49084F8E1BD1381B0012F636 /* AuntieController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49084F8C1BD1381B0012F636 /* AuntieController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		49084F8F1BD1381B0012F636 /* AuntieController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49084F8D1BD1381B0012F636 /* AuntieController.m */; };
 		49084FEF1BD13FBC0012F636 /* Episode.h in Headers */ = {isa = PBXBuildFile; fileRef = 49084FED1BD13FBC0012F636 /* Episode.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -129,6 +130,8 @@
 		13CCC3241BD25B9600D04D5D /* EpisodeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EpisodeCollectionViewCell.m; sourceTree = "<group>"; };
 		13CCC3291BD265FE00D04D5D /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
 		13CCC32A1BD265FE00D04D5D /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
+		1AA08781DF4AE24C8F2B6314 /* CategoriesAZViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoriesAZViewController.h; sourceTree = "<group>"; };
+		1AA0899BECCE55C9C4A671C9 /* CategoriesAZViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoriesAZViewController.m; sourceTree = "<group>"; };
 		49084F8C1BD1381B0012F636 /* AuntieController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuntieController.h; sourceTree = "<group>"; };
 		49084F8D1BD1381B0012F636 /* AuntieController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuntieController.m; sourceTree = "<group>"; };
 		49084F931BD138CC0012F636 /* ThunderRequest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ThunderRequest.xcodeproj; path = ThunderRequest/ThunderRequest.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -203,6 +206,8 @@
 				49F848101BD3F4D6008FCED8 /* LiveChannelsViewController.m */,
 				133ACE401BD275A3008630CE /* EpisodeDetailViewController.h */,
 				133ACE411BD275A3008630CE /* EpisodeDetailViewController.m */,
+				1AA0899BECCE55C9C4A671C9 /* CategoriesAZViewController.m */,
+				1AA08781DF4AE24C8F2B6314 /* CategoriesAZViewController.h */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -477,6 +482,7 @@
 				133ACE421BD275A3008630CE /* EpisodeDetailViewController.m in Sources */,
 				493EA4421BD1300D00B0C50D /* main.m in Sources */,
 				133ACE4B1BD28A1A008630CE /* CategoriesTableViewController.m in Sources */,
+				1AA085A56F095B05D536D027 /* CategoriesAZViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

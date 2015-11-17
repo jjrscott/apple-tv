@@ -238,7 +238,7 @@
 
 - (void)getEpisodesForCategory:(EpisodeCategory *)category completion:(ContentCompletion)completion
 {
-    [self.listingsRequestController get:@"categories/(:categoryIdentifier)/highlights" withURLParamDictionary:@{@"categoryIdentifier":category.identifier} completion:^(TSCRequestResponse * _Nullable response, NSError * _Nullable error) {
+    [self.listingsRequestController get:@"categories/(:categoryIdentifier)/highlights?page=1&per_page=200" withURLParamDictionary:@{@"categoryIdentifier":category.identifier} completion:^(TSCRequestResponse * _Nullable response, NSError * _Nullable error) {
        
         if (error) {
             completion(nil, error);
@@ -256,6 +256,31 @@
         
         completion(episodesArray, nil);
         
+    }];
+}
+
+- (void)getAllEpisodesForCategory:(EpisodeCategory *)category completion:(ContentCompletion)completion
+{
+
+    NSLog(@"%@", category.identifier);
+    [self.listingsRequestController get:@"categories/(:categoryIdentifier)/programmes?page=1&per_page=200" withURLParamDictionary:@{@"categoryIdentifier":category.identifier} completion:^(TSCRequestResponse * _Nullable response, NSError * _Nullable error) {
+
+        if (error) {
+            completion(nil, error);
+            return;
+        }
+
+        NSMutableArray *episodesArray = [NSMutableArray array];
+
+        for (NSDictionary *episodeDictionary in response.dictionary[@"category_programmes"][@"elements"]) {
+
+            Episode *newEpisode = [[Episode alloc] initWithDictionary:episodeDictionary];
+            [episodesArray addObject:newEpisode];
+
+        }
+
+        completion(episodesArray, nil);
+
     }];
 }
 
@@ -317,6 +342,8 @@
 
 - (void)getEpisodesForProgrammeByString:(NSString *)programme completion:(ContentCompletion)completion
 {
+    
+    
     [self.listingsRequestController get:@"programmes/(:programmeIdentifier)/episodes?lang=en&rights=mobile&page=1&per_page=200&availability=available&api_key=x5pfeqccnm6j52mp9c298qdm" withURLParamDictionary:@{@"programmeIdentifier":programme} completion:^(TSCRequestResponse * _Nullable response, NSError * _Nullable error) {
 
         if (error) {

@@ -42,9 +42,11 @@
     if (self = [super init]) {
         
         self.title = @"Categories";
+        self.isAtoZ = NO;
         
         self.episodesViewController = [CategoryEpisodesViewController new];
         self.episodesViewController.collectionView.numberOfEpisodesPerRow = 2;
+
         
         self.categoriesTableViewController = [CategoriesTableViewController new];
         self.categoriesTableViewController.delegate = self;
@@ -58,6 +60,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    if (self.isAtoZ) {
+        self.episodesViewController.isAtoZ = YES;
+    }
     
     self.view.backgroundColor = [UIColor auntieDarkGrayColor];
 }
