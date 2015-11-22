@@ -74,39 +74,51 @@
 
 - (void)playChannel:(Channel *)channel
 {
-    
-    UIAlertController *licensingAlert = [UIAlertController alertControllerWithTitle:@"TV Licensing" message:@"Don't forget, to watch live TV online as it's being broadcast, you still need to be covered by a TV Licence" preferredStyle:UIAlertControllerStyleAlert];
-    [licensingAlert addAction:[UIAlertAction actionWithTitle:@"Watch Now" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    NSDate *lastShowDate = [NSUserDefaults.standardUserDefaults objectForKey:@"LastTVLicensingAlert"];
+    if (lastShowDate && lastShowDate.timeIntervalSinceNow > -7*24*60*60)
+    {
+        [self _playChannel:channel];
+    }
+    else
+    {
+        UIAlertController *licensingAlert = [UIAlertController alertControllerWithTitle:@"TV Licensing" message:@"Don't forget, to watch live TV online as it's being broadcast, you still need to be covered by a TV Licence" preferredStyle:UIAlertControllerStyleAlert];
+        [licensingAlert addAction:[UIAlertAction actionWithTitle:@"Watch Now" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self _playChannel:channel];
+            [NSUserDefaults.standardUserDefaults setObject:NSDate.date forKey:@"LastTVLicensingAlert"];
+            [NSUserDefaults.standardUserDefaults synchronize];
+        }]];
         
-        AVPlayerViewController *viewController = [[AVPlayerViewController alloc] init];
-        viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self presentViewController:viewController animated:YES completion:nil];
+        [licensingAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         
-        [[AuntieController sharedController] getStreamURLForChannel:channel completion:^(NSURL *episodeURL, NSError *error) {
-            
-            if (error) {
-                
-                [viewController dismissViewControllerAnimated:YES completion:nil];
-                
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Unable to start video playback." message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-                [alertController addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil]];
-                [self presentViewController:alertController animated:YES completion:nil];
-            }
-            
-            AVPlayer *player = [[AVPlayer alloc] initWithURL:episodeURL];
-            player.closedCaptionDisplayEnabled = true;
-            
-            viewController.player = player;
-            [viewController.player play];
-        }];
         
-    }]];
-    
-    [licensingAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
-    [self presentViewController:licensingAlert animated:true completion:nil];
+        
+        [self presentViewController:licensingAlert animated:true completion:nil];
+    }
+}
 
-
+- (void)_playChannel:(Channel *)channel
+{
+    AVPlayerViewController *viewController = [[AVPlayerViewController alloc] init];
+    viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:viewController animated:YES completion:nil];
+    
+    [[AuntieController sharedController] getStreamURLForChannel:channel completion:^(NSURL *episodeURL, NSError *error) {
+        
+        if (error) {
+            
+            [viewController dismissViewControllerAnimated:YES completion:nil];
+            
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Unable to start video playback." message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+        
+        AVPlayer *player = [[AVPlayer alloc] initWithURL:episodeURL];
+        player.closedCaptionDisplayEnabled = true;
+        
+        viewController.player = player;
+        [viewController.player play];
+    }];
 }
 
 @end
