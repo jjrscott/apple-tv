@@ -209,6 +209,43 @@
         selectedVersion = self.episode.signedVersion;
         
     }
+    
+    NSString *key = [NSString stringWithFormat:@"_EpisodeTime%@",selectedVersion.identifier];
+    NSData *timeData = [NSUserDefaults.standardUserDefaults objectForKey:key];
+    
+    if (timeData)
+    {
+        CMTime time;
+        [timeData getBytes:&time length:sizeof(time)];
+        
+        NSDate* d = [NSDate dateWithTimeIntervalSince1970:CMTimeGetSeconds(time)]; //Then specify output format
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        [dateFormatter setDateFormat:@"HH:mm:ss"];
+        
+        
+        
+        UIAlertController *licensingAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+        [licensingAlert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Resume at %@", [dateFormatter stringFromDate:d]] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self playSelectedVersion:selectedVersion time:time];
+        }]];
+        
+        [licensingAlert addAction:[UIAlertAction actionWithTitle:@"Start from the beginning" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self playSelectedVersion:selectedVersion time:CMTimeMake(0, 1)];
+        }]];
+        
+        [licensingAlert addAction:[UIAlertAction actionWithTitle:nil style:UIAlertActionStyleCancel handler:NULL]];
+        
+        [self presentViewController:licensingAlert animated:true completion:nil];
+    }
+    else
+    {
+        [self playSelectedVersion:selectedVersion time:CMTimeMake(0, 1)];
+    }
+    
+}
+- (void)playSelectedVersion:(EpisodeVersion*)selectedVersion time:(CMTime)time
+{
     playerViewController = [[AVPlayerViewController alloc] init];
     playerViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:playerViewController animated:YES completion:nil];
@@ -228,8 +265,8 @@
         
         AVPlayer *player = [[AVPlayer alloc] initWithURL:episodeURL];
         player.closedCaptionDisplayEnabled = true;
-
-
+        [player seekToTime:time];
+        
         playerViewController.player = player;
         [playerViewController.player play];
 
@@ -237,7 +274,14 @@
             [[NSNotificationCenter defaultCenter] addObserver:self
                                                      selector:@selector(itemDidFinishPlaying:)
                                                          name:AVPlayerItemDidPlayToEndTimeNotification
-                                                       object:player.currentItem];
+                                                       object:selectedVersion];
+            
+            [player addPeriodicTimeObserverForInterval:CMTimeMake(1,1) queue:NULL usingBlock:^(CMTime time)
+            {
+                NSString *key = [NSString stringWithFormat:@"_EpisodeTime%@",selectedVersion.identifier];
+                [NSUserDefaults.standardUserDefaults setObject:[NSData dataWithBytes:&time length:sizeof(time)] forKey:key];
+                [NSUserDefaults.standardUserDefaults synchronize];
+            }];
         });
        
     }];
@@ -245,6 +289,11 @@
 
 - (void)itemDidFinishPlaying:(NSNotification *)notification {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    EpisodeVersion *selectedVersion = notification.object;
+    NSString *key = [NSString stringWithFormat:@"_EpisodeTime%@",selectedVersion.identifier];
+    [NSUserDefaults.standardUserDefaults removeObjectForKey:key];
+    [NSUserDefaults.standardUserDefaults synchronize];
 
     [playerViewController dismissViewControllerAnimated:YES completion:^{
         playerViewController = nil;
